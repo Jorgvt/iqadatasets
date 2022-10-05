@@ -1,0 +1,15 @@
+website:
+  sidebar:
+    contents:
+      - index.ipynb
+      - section: create_csv
+        contents:
+          - 00_create_csv/00_loading_live.ipynb
+          - 00_create_csv/01_loading_pipal.ipynb
+          - 00_create_csv/02_loading_tid2008.ipynb
+          - 00_create_csv/03_loading_tid2013.ipynb
+      - section: datasets
+        contents:
+          - 01_datasets/01_00_live.ipynb
+          - 01_datasets/01_01_tid2008.ipynb
+          - 01_datasets/01_02_tid2013.ipynb
