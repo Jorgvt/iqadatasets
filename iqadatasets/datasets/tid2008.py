@@ -17,9 +17,9 @@ class TID2008():
 
     def __init__(self,
                  path, # Path to the root directory of the dataset.
-                 exclude_imgs: List = None, # Image ID's to exclude.
-                 exclude_dist: List = None, # Distortion ID's to exclude.
-                 exclude_ints: List = None, # Distortion Intensities ID's to exclude.
+                 exclude_imgs: List[int] = None, # Image ID's to exclude.
+                 exclude_dist: List[int] = None, # Distortion ID's to exclude.
+                 exclude_ints: List[int] = None, # Distortion Intensities ID's to exclude.
                  ):
         self.path_root = Path(path) if isinstance(path, str) else path
         self.path_ref = self.path_root/"reference_images"
