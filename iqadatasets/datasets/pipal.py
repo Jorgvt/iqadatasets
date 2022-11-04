@@ -11,7 +11,7 @@ import pandas as pd
 import tensorflow as tf
 import cv2
 
-# %% ../../Notebooks/01_datasets/01_04_pipal.ipynb 8
+# %% ../../Notebooks/01_datasets/01_04_pipal.ipynb 5
 class PIPAL():
     """Builder for the PIPAL dataset"""
 
@@ -22,8 +22,8 @@ class PIPAL():
                  exclude_ints: List[int] = None, # Distortion Intensities ID's to exclude.
                  ):
         self.path_root = Path(path) if isinstance(path, str) else path
-        self.path_csv = path_root / "image_pairs_mos.csv"
-        self.path_ref = path_root / "Train_Ref"
+        self.path_csv = self.path_root / "image_pairs_mos.csv"
+        self.path_ref = self.path_root / "Train_Ref"
         self.data = self.load_data(self.path_csv, exclude_imgs, exclude_dist, exclude_ints)
 
     @property
