@@ -30,7 +30,6 @@ class TID2008():
         self.paths_ref = [str(self.path_ref/p) for p in self.data["Reference"]]
         self.paths_dist = [str(self.path_dist/p) for p in self.data["Distorted"]]
         self.num_parallel_calls = num_parallel_calls
-        # self.paths_pair_mos = tf.data.Dataset.from_tensor_slices((self.paths_ref, self.paths_dist, self.data["MOS"]))
 
     @property
     def dataset(self):
@@ -53,16 +52,6 @@ class TID2008():
         img_dist = tf.image.convert_image_dtype(img_dist, dtype=tf.float32)
 
         return img_ref, img_dist, mos
-
-    def data_gen(self):
-        """Dataset generator to build the tf.data.Dataset."""
-        for i, row in self.data.iterrows():
-            ref, dist, mos = row.Reference, row.Distorted, row.MOS
-            dist = cv2.imread(str(self.path_dist/dist))
-            dist = cv2.cvtColor(dist, cv2.COLOR_BGR2RGB)/255.0
-            ref = cv2.imread(str(self.path_ref/ref))
-            ref = cv2.cvtColor(ref, cv2.COLOR_BGR2RGB)/255.0
-            yield ref, dist, mos
 
     def load_data(self,
                   path,
