@@ -20,34 +20,38 @@ class TID2013():
                  exclude_imgs: List[int] = None, # Image ID's to exclude.
                  exclude_dist: List[int] = None, # Distortion ID's to exclude.
                  exclude_ints: List[int] = None, # Distortion Intensities ID's to exclude.
+                 num_parallel_calls: int = tf.data.AUTOTUNE, # Number of parallel calls when loading the images.
                  ):
         self.path_root = Path(path) if isinstance(path, str) else path
         self.path_ref = self.path_root/"reference_images"
         self.path_dist = self.path_root/"distorted_images"
         self.path_csv = self.path_root/"image_pairs_mos.csv"
         self.data = self.load_data(self.path_csv, exclude_imgs, exclude_dist, exclude_ints)
+        self.paths_ref = [str(self.path_ref/p) for p in self.data["Reference"]]
+        self.paths_dist = [str(self.path_dist/p) for p in self.data["Distorted"]]
+        self.num_parallel_calls = num_parallel_calls
 
     @property
     def dataset(self):
         """tf.data.Dataset object built from the TID2013 dataset."""
-        return tf.data.Dataset.from_generator(
-                self.data_gen,
-                output_signature=(
-                    tf.TensorSpec(shape=(384, 512, 3), dtype=tf.float32),
-                    tf.TensorSpec(shape=(384, 512, 3), dtype=tf.float32),
-                    tf.TensorSpec(shape=(), dtype=tf.float32)
-                )
-            ) 
+        return tf.data.Dataset.from_tensor_slices((self.paths_ref, self.paths_dist, self.data["MOS"]))\
+                              .map(self.preprocess, num_parallel_calls=self.num_parallel_calls)
 
-    def data_gen(self):
-        """Dataset generator to build the tf.data.Dataset."""
-        for i, row in self.data.iterrows():
-            ref, dist, mos = row.Reference, row.Distorted, row.MOS
-            dist = cv2.imread(str(self.path_dist/dist))
-            dist = cv2.cvtColor(dist, cv2.COLOR_BGR2RGB)/255.0
-            ref = cv2.imread(str(self.path_ref/ref))
-            ref = cv2.cvtColor(ref, cv2.COLOR_BGR2RGB)/255.0
-            yield ref, dist, mos
+    @staticmethod
+    def preprocess(path_ref,
+                   path_dist,
+                   mos,
+                   ):
+        img_ref = tf.io.read_file(path_ref)
+        img_dist = tf.io.read_file(path_dist)
+
+        img_ref = tf.image.decode_bmp(img_ref, channels=3)
+        img_dist = tf.image.decode_bmp(img_dist, channels=3)
+
+        img_ref = tf.image.convert_image_dtype(img_ref, dtype=tf.float32)
+        img_dist = tf.image.convert_image_dtype(img_dist, dtype=tf.float32)
+
+        return img_ref, img_dist, mos
 
     def load_data(self,
                   path,
