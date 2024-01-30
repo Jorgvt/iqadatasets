@@ -51,6 +51,10 @@ class BAPPS():
         img_dist_0 = tf.image.convert_image_dtype(img_dist_0, dtype=tf.float32)
         img_dist_1 = tf.image.convert_image_dtype(img_dist_1, dtype=tf.float32)
 
+        img_ref = tf.image.resize(img_ref, size=(252,252))
+        img_dist_0 = tf.image.resize(img_dist_0, size=(252,252))
+        img_dist_1 = tf.image.resize(img_dist_1, size=(252,252))
+
         return img_ref, img_dist_0, img_dist_1, label
 
     def load_data(self,
