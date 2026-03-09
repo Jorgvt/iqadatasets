@@ -1,0 +1,25 @@
+[project]
+name = "iqadatasets"
+version = "0.0.1"
+description = "Loading datasets from our private server."
+readme = "README.md"
+authors = [
+    { name = "Jorgvt", email = "jorge.vila-tomas@uv.es" }
+]
+requires-python = ">=3.9"
+dependencies = [
+    "fastcore>=1.8.9",
+    "natsort>=8.4.0",
+    "opencv-python>=4.13.0.92",
+    "pandas>=2.3.3",
+    "tensorflow>=2.20.0",
+]
+
+[build-system]
+requires = ["uv_build>=0.9.25,<0.10.0"]
+build-backend = "uv_build"
+
+[dependency-groups]
+dev = [
+    "nbdev>=2.4.6",
+]

@@ -1,9 +1,0 @@
-project:
-  output-dir: _docs
-
-website:
-  title: "iqadatasets"
-  site-url: "https://Jorgvt.github.io/iqadatasets"
-  description: "Loading datasets from our private server."
-  repo-branch: master
-  repo-url: "https://github.com/Jorgvt/iqadatasets"
