@@ -71,6 +71,14 @@ class KADIK10K():
         if exclude_ints is not None:
             data = data[~data["intensity"].isin(exclude_ints)]
         if exclude_identical_pairs:
-            data = data[~((data["distortion"] == 1) & (data["intensity"] == 1))]
+            # The following distortion/intensity combinations produce images
+            # pixel-identical to the reference (verified by exhaustive pixel scan).
+            # Including them causes dist=0 → infinite gradients via d/dx sqrt(0).
+            identical_mask = (
+                ((data["distortion"] == 1)  & (data["intensity"] == 1)) |
+                ((data["distortion"] == 3)  & (data["intensity"] == 1)) |
+                ((data["distortion"] == 8)  & (data["intensity"] == 1)) |
+                ((data["distortion"] == 18) & (data["intensity"] == 3))
+            )
+            data = data[~identical_mask]
         return data
-
